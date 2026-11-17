@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 characters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', '.']
 
@@ -85,23 +86,48 @@ def repetitions():
     return all_iterations
   
 
-import matplotlib.pyplot as plt
 
-scores = repetitions() 
-iterations = range(1, len(scores) + 1)
+# scores = repetitions() 
+# iterations = range(1, len(scores) + 1)
 
 
-plt.bar(iterations, scores)
-plt.xlabel('Iteration')
-plt.ylabel('Score')
-plt.show()
+# plt.bar(iterations, scores)
+# plt.xlabel('Iteration')
+# plt.ylabel('Score')
+# plt.show()
 
 def mutate(S):
     position = random.choice(range(62))
-    new_character = random.choice(range(62))
-
+    new_character = random.choice(characters)
     new_S = S[:position] + new_character + S[position +1:]
 
     return new_S
+# S = genRandText()
+# print("Original:", S)
 
+# new_S = mutate(S)
+# print("Mutated:", new_S)
+current_score = score(S)
+iteration = 0 
+iteration_limit = int(input('Please state your desired iteration limit >> '))
+all_scores = []
+while current_score < 62 and iteration < iteration_limit:
+    new_S = mutate(S)
+    new_score = score(new_S)
+    if new_score > current_score:
+        S = new_S
+        current_score = new_score
+    iteration += 1
+    all_scores.append(current_score)
 
+print("Final score:", current_score)
+print("Iterations:", iteration)
+print("Final string:", S)
+
+iterations = range(1, len(all_scores) + 1)
+
+plt.plot(iterations, all_scores)
+plt.xlabel('Iteration')
+plt.ylabel('Score')
+plt.savefig("task2_graph.png")
+print("GRAPH SAVED")
